@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="StartActivity">
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/layout_btm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/onboarding_nav" />
+
+    <RelativeLayout
+        android:id="@+id/layout_btm"
+        android:layout_width="match_parent"
+        android:layout_height="340dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connect with Garis Account"
+            android:textColor="@color/lessdark"
+            android:textSize="16sp"
+            android:textFontWeight="400"
+            android:fontFamily="@font/inter"
+            android:gravity="center"/>
+
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="20dp"
+            android:textAllCaps="false"
+            android:layout_below="@id/tv_1"
+            android:background="@drawable/btn_blue_one"
+            app:backgroundTint="@null"
+            android:fontFamily="@font/inter_bold"
+            android:text="Login"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/button_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/inter_bold"
+            android:layout_below="@id/button_login"
+            android:background="@drawable/btn_white_stroke"
+            android:text="Create new one"
+            android:textAllCaps="false"
+            android:textColor="@color/lessdark"
+            app:backgroundTint="@null" />
+
+        <LinearLayout
+            android:id="@+id/ly_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:layout_below="@id/button_register">
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="0.8dp"
+                android:background="#7F7F7F"
+                />
+
+            <TextView
+                android:id="@+id/tv_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="or"
+                android:layout_marginHorizontal="10dp"
+                android:textColor="@color/lessdark"
+                android:textSize="16sp"
+                android:textFontWeight="400"
+                android:fontFamily="@font/inter"
+                android:gravity="center"/>
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="0.8dp"
+                android:background="#7F7F7F"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_connect_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ly_1"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/btn_white_stroke_alt"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            app:backgroundTint="@null">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
+                android:text="Connect with"
+                android:textColor="@color/lessdark" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/flat_color_icons_google" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515707674601",
+    "project_id": "garis-8d004",
+    "storage_bucket": "garis-8d004.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515707674601:android:c9ff9421d09272e0a73578",
+        "android_client_info": {
+          "package_name": "com.tech4everyone.garis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdfaAaOdu6X0q7CwB95Gkh8ttstN69pIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
