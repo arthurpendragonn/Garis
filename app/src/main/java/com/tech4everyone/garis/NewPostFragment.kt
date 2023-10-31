@@ -24,6 +24,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.Firebase
 import com.google.firebase.database.getValue
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -31,6 +34,9 @@ import com.tech4everyone.garis.databinding.FragmentNewPostBinding
 import com.tech4everyone.garis.transactions.Post
 import com.tech4everyone.garis.transactions.User
 import kotlinx.coroutines.delay
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 import java.sql.Timestamp
@@ -44,12 +50,18 @@ import java.util.Date
 class NewPostFragment : BaseFragment() {
     private var _binding: FragmentNewPostBinding? = null
     private val binding get() = _binding!!
-    private var getFile: File? = null
+    private var getFile: Uri? = null
+    private var getUrlFile: String? = null
 
     private lateinit var database: DatabaseReference
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageRef: StorageReference
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentNewPostBinding.inflate(inflater, container, false)
+
+        activity?.actionBar?.title = "Transaksi Baru"
+
         return binding.root
     }
 
@@ -57,6 +69,8 @@ class NewPostFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         database = Firebase.database.reference
+        storage = Firebase.storage
+        storageRef = storage.reference
 
         binding.fabSubmitPost.setOnClickListener { submitPost() }
         binding.back.setOnClickListener {
@@ -86,7 +100,7 @@ class NewPostFragment : BaseFragment() {
 
             val myFile = uriToFile(selectedImg, requireContext())
 
-            getFile = myFile
+            getFile = selectedImg
             binding.photo.setImageURI(selectedImg)
             textRecognition(selectedImg)
 
@@ -160,6 +174,7 @@ class NewPostFragment : BaseFragment() {
     private fun submitPost() {
         val title = binding.fieldTitle.text.toString()
         val body = binding.fieldBody.text.toString()
+        val provider = binding.provider.text.toString()
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
@@ -170,6 +185,11 @@ class NewPostFragment : BaseFragment() {
         // Body is required
         if (TextUtils.isEmpty(body)) {
             binding.fieldBody.error = REQUIRED
+            return
+        }
+
+        if (TextUtils.isEmpty(provider)) {
+            binding.provider.error = REQUIRED
             return
         }
 
@@ -195,8 +215,34 @@ class NewPostFragment : BaseFragment() {
                         ).show()
                     } else {
                         // Write new post
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                        val current = LocalDateTime.now().format(formatter)
 
-                        writeNewPost(userId, title, body.toInt())
+                        //upload to firebase storage
+                        if (getFile != null) {
+                            val transactionsRef = storageRef.child("images/${getFile?.lastPathSegment}")
+
+                            val uploadTask = getFile?.let { transactionsRef.putFile(it) }
+                            uploadTask?.continueWithTask { task ->
+                                if (!task.isSuccessful) {
+                                    task.exception?.let {
+                                        throw it
+                                    }
+                                }
+                                transactionsRef.downloadUrl
+                            }?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    writeNewPost(userId, title, body.toInt(), provider, current, task.result.toString())
+                                    Log.d(TAG, task.result.toString())
+
+                                } else {
+                                    // Handle failures
+                                    Log.e(TAG, "error")
+                                }
+                            }
+                        } else {
+                            writeNewPost(userId, title, body.toInt(), provider, current, "")
+                        }
                     }
 
                     setEditingEnabled(true)
@@ -223,7 +269,7 @@ class NewPostFragment : BaseFragment() {
         }
     }
 
-    private fun writeNewPost(userId: String, title: String, number: Int) {
+    private fun writeNewPost(userId: String, title: String, number: Int, provider: String, date: String, fileUrl: String?) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         val key = database.child("posts").push().key
@@ -232,7 +278,7 @@ class NewPostFragment : BaseFragment() {
             return
         }
 
-        val post = Post(userId, title, number)
+        val post = Post(userId, title, number, provider, date, fileUrl)
         val postValues = post.toMap()
 
         val childUpdates = hashMapOf<String, Any>(

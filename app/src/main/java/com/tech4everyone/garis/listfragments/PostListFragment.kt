@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -23,10 +24,16 @@ import com.google.firebase.database.Transaction
 import com.google.firebase.database.database
 import com.google.firebase.Firebase
 import com.tech4everyone.garis.R
+import com.tech4everyone.garis.bitmapToFile
+import com.tech4everyone.garis.databinding.ActivityMainBinding
+import com.tech4everyone.garis.databinding.FragmentAllPostsBinding
+import com.tech4everyone.garis.databinding.FragmentMainBinding
 import com.tech4everyone.garis.transactions.Post
 import com.tech4everyone.garis.transactions.PostViewHolder
 
 abstract class PostListFragment : Fragment() {
+    private var _binding: FragmentAllPostsBinding? = null
+    private val binding get() = _binding!!
 
     // [START define_database_reference]
     private lateinit var database: DatabaseReference
@@ -44,22 +51,25 @@ abstract class PostListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        val rootView = inflater.inflate(R.layout.fragment_all_posts, container, false)
+//        super.onCreateView(inflater, container, savedInstanceState)
+//        val rootView = inflater.inflate(R.layout.fragment_all_posts, container, false)
+        _binding = FragmentAllPostsBinding.inflate(inflater, container, false)
+        binding.progressbarMain.visibility = View.VISIBLE
 
         // [START create_database_reference]
         database = Firebase.database.reference
         // [END create_database_reference]
 
-        recycler = rootView.findViewById(R.id.messagesList)
+        recycler = binding.root.findViewById(R.id.messagesList)
         recycler.setHasFixedSize(true)
 
-        return rootView
+        return binding.root
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
 
         // Set up Layout Manager, reverse layout
         manager = LinearLayoutManager(activity)
@@ -69,8 +79,6 @@ abstract class PostListFragment : Fragment() {
 
         // Set up FirebaseRecyclerAdapter with the Query
         val postsQuery = getQuery(database)
-
-//        val postsQuery = database.child("user-posts").child(uid)
 
         val options = FirebaseRecyclerOptions.Builder<Post>()
             .setQuery(postsQuery, Post::class.java)
@@ -111,6 +119,8 @@ abstract class PostListFragment : Fragment() {
             }
         }
         recycler.adapter = adapter
+        binding.progressbarMain.visibility = View.GONE
+
     }
 
     // [START post_stars_transaction]
@@ -157,6 +167,7 @@ abstract class PostListFragment : Fragment() {
         super.onStop()
         adapter?.stopListening()
     }
+
 
     abstract fun getQuery(databaseReference: DatabaseReference): Query
 

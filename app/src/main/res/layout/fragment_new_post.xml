@@ -24,19 +24,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
-                android:text="Tambahkan Transaksi Baru"
-                android:textColor="#494949"
-                android:textSize="24sp" />
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/inter_bold"-->
+<!--                android:text="Tambahkan Transaksi Baru"-->
+<!--                android:textColor="#494949"-->
+<!--                android:textSize="24sp" />-->
 
             <ImageView
                 android:id="@+id/photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="24dp"
+                android:layout_marginVertical="12dp"
                 android:background="@drawable/btn_white_stroke_alt"
                 android:minHeight="90dp"
                 android:padding="24dp"
@@ -71,38 +71,62 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/succes"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Data ditemukan"
-                android:textColor="#009688"
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:layout_marginVertical="6dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/succes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:drawablePadding="12dp"
+                    android:text="Nominal Terbaca"
+                    android:textColor="#009688"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/icons8_success_48" />
+
+                <TextView
+                    android:id="@+id/fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:drawablePadding="12dp"
+                    android:text="Nominal Tidak Terbaca"
+                    android:textColor="#E91E63"
+                    android:textSize="20sp"
+                    app:drawableStartCompat="@drawable/icons8_cancel_48"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
 
             <TextView
-                android:id="@+id/fail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
-                android:gravity="center"
-                android:text="Data tidak ditemukan"
-                android:textColor="#E91E63"
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:fontFamily="@font/inter"
+                android:layout_marginTop="12dp"
+                android:text="Silahkan lengkapi data berikut: "
+                android:textColor="#959595"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/fieldTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/btn_white_alt"
                 android:drawableStart="@drawable/icons8_label_24"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/inter"
-                android:hint="Title"
+                android:hint="Judul"
                 android:inputType="text"
                 android:maxLines="1"
                 android:minHeight="48dp"
@@ -113,13 +137,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="100dp"
                 android:background="@drawable/btn_white_alt"
                 android:drawableStart="@drawable/icons8_paid_bill_24"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/inter"
-                android:hint="Your Transaction Nominal..."
+                android:hint="Jumlah Nominal"
                 android:inputType="number"
+                android:maxLines="1"
+                android:minHeight="48dp"
+                android:padding="12.5dp" />
+
+            <EditText
+                android:id="@+id/provider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="100dp"
+                android:background="@drawable/btn_white_alt"
+                android:drawableStart="@drawable/icons8_apps_24"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/inter"
+                android:hint="Penyedia Layanan"
+                android:inputType="text"
                 android:maxLines="1"
                 android:minHeight="48dp"
                 android:padding="12.5dp" />
@@ -135,18 +174,21 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/icons8_create_document_48"
-        android:backgroundTint="@color/lesswhite"
+        android:backgroundTint="#FFFFFF"
+        app:borderWidth="0dp"
         app:tint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="batal"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        app:tint="@null"
         android:layout_margin="16dp"
-        android:background="@drawable/btn_white"
+        android:src="@drawable/icons8_back_96"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

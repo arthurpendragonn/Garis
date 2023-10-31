@@ -11,7 +11,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/icons8_add_file_96"
-        android:backgroundTint="@color/lesswhite"
+        app:borderWidth="0dp"
+        android:backgroundTint="#FFFFFF"
         app:tint="@null" />
 
     <FrameLayout
