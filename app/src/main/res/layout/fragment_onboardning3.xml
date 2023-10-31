@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="We're here to help"
+        android:text="Wujudkan di Garis!"
         android:textColor="@color/blue1"
         android:textSize="24sp"
         android:paddingTop="10dp"

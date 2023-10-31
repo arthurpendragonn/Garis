@@ -21,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Beli Listrik"
-            android:fontFamily="@font/inter_bold"
-            android:textColor="#676767"
-            android:textSize="14sp"
-            android:layout_marginStart="24dp"
+            android:fontFamily="@font/inter"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,17 +39,17 @@
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <ImageButton
-            android:id="@+id/btn_delete"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icons8_delete_96"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/dateItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:text="14/10/2023"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/lessdark"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@null" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

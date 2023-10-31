@@ -1,5 +1,6 @@
 package com.tech4everyone.garis
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -33,6 +34,7 @@ private const val ARG_PARAM2 = "param2"
 class DetailTransactionFragment : BaseFragment() {
     private lateinit var postKey: String
     private lateinit var postReference: DatabaseReference
+    private lateinit var userPostReference: DatabaseReference
 
     private var postListener: ValueEventListener? = null
 
@@ -52,6 +54,38 @@ class DetailTransactionFragment : BaseFragment() {
         // Initialize Database
         postReference = Firebase.database.reference
             .child("posts").child(postKey)
+        userPostReference = Firebase.database.reference
+            .child("user-posts").child(uid).child(postKey)
+
+        binding.delete.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Are you sure you want to Delete?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    // Delete selected data
+                    postReference.removeValue().addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            userPostReference.removeValue().addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(requireContext(), "Data Terhapus", Toast.LENGTH_SHORT).show()
+                                    findNavController().navigate(R.id.action_DetailTransactionFragment_to_MainFragment)
+                                } else {
+                                    Toast.makeText(requireContext(), "Terjadi error", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), "Terjadi error", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
+        }
 
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_DetailTransactionFragment_to_MainFragment)
@@ -69,14 +103,14 @@ class DetailTransactionFragment : BaseFragment() {
                 post?.let {
                     with(binding) {
                         title.text = it.title
-                        number.text = it.number.toString()
+                        number.text = rupiah(it.number!!)
                         provider.text = it.provider
                         date.text = it.date
                     }
 
                     if (it.fileUrl != "") {
                         Glide.with(requireContext())
-                            .load(it.fileUrl)
+                            .load(it.fileUrl).dontTransform()
                             .into(binding.photo)
 
                         binding.attach.text = "Terdapat file terkait"

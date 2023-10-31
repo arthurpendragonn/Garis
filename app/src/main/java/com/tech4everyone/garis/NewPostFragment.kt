@@ -57,11 +57,10 @@ class NewPostFragment : BaseFragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentNewPostBinding.inflate(inflater, container, false)
 
-        activity?.actionBar?.title = "Transaksi Baru"
-
+        activity?.actionBar?.title = "Unggah Transaksi"
         return binding.root
     }
 
@@ -121,45 +120,49 @@ class NewPostFragment : BaseFragment() {
                 .addOnSuccessListener { visionText ->
                     // Task completed successfully
                     // ...
-                    val resultText = visionText.text
-                    val multipleNominal: MutableList<Int> = ArrayList()
-
-
                     onFailed()
                     binding.fieldBody.text.clear()
 
-                    for (block in visionText.textBlocks) {
-                        for (line in block.lines) {
-                            val lineText = line.text
+                    if (visionText != null) {
+                        val resultText = visionText.text
+                        val multipleNominal: MutableList<Int> = ArrayList()
 
-                            val removedDots = lineText.replace(".", "")
-                            val removedColumn = removedDots.replace(",", "")
-                            val removedSpace = removedColumn.replace(" ", "")
-                            val charArr = removedSpace.toCharArray()
+                        for (block in visionText.textBlocks) {
+                            for (line in block.lines) {
+                                val lineText = line.text
+
+                                val removedDots = lineText.replace(".", "")
+                                val removedColumn = removedDots.replace(",", "")
+                                val removedSpace = removedColumn.replace(" ", "")
+                                val charArr = removedSpace.toCharArray()
 
 
-                            if (charArr[0] == 'R') {
-                                if (charArr[1] == 'p') {
-                                    val nominal = removedSpace.filter { it -> it.isDigit() }
+                                if (charArr[0] == 'R') {
+                                    if (charArr[1] == 'p') {
+                                        val nominal = removedSpace.filter { it -> it.isDigit() }
 
-                                    multipleNominal.add(nominal.toInt())
-                                    binding.fieldBody.setText(nominal)
-                                    onSuccess()
+                                        if (nominal != "")  {
+                                            multipleNominal.add(nominal.toInt())
+                                            binding.fieldBody.setText(nominal)
+                                            onSuccess()
+                                        }
+                                    }
                                 }
                             }
                         }
+
+                        if (multipleNominal.size > 1) {
+                            val max: Int = multipleNominal.maxOrNull() ?: 0
+                            binding.fieldBody.setText(max.toString())
+                            onSuccess()
+                        }
                     }
 
-                    if (multipleNominal.size > 1) {
-                        val max: Int = multipleNominal.maxOrNull() ?: 0
-                        binding.fieldBody.setText(max.toString())
-                        onSuccess()
-                    }
                 }
                 .addOnFailureListener { e ->
                     // Task failed with an exception
                     // ...
-                    Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "$e", Toast.LENGTH_SHORT).show()
 
                 }
 
@@ -215,7 +218,7 @@ class NewPostFragment : BaseFragment() {
                         ).show()
                     } else {
                         // Write new post
-                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                         val current = LocalDateTime.now().format(formatter)
 
                         //upload to firebase storage

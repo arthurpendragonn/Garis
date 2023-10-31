@@ -18,7 +18,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.Firebase
 import com.tech4everyone.garis.listfragments.MyMonthlyFragment
 import com.tech4everyone.garis.databinding.FragmentMainBinding
-import com.tech4everyone.garis.listfragments.MyDailyFragment
+import com.tech4everyone.garis.listfragments.WeeklyFragment
 import com.tech4everyone.garis.listfragments.YearlyFragment
 
 class MainFragment : Fragment(), MenuProvider {
@@ -45,7 +45,7 @@ class MainFragment : Fragment(), MenuProvider {
         // Create the adapter that will return a fragment for each section
         pagerAdapter = object : FragmentStateAdapter(childFragmentManager, viewLifecycleOwner.lifecycle) {
             private val fragments = arrayOf<Fragment>(
-                MyDailyFragment(),
+                WeeklyFragment(),
                 MyMonthlyFragment(),
                 YearlyFragment()
             )
@@ -60,9 +60,9 @@ class MainFragment : Fragment(), MenuProvider {
             container.adapter = pagerAdapter
             TabLayoutMediator(tabs, container) { tab, position ->
                 tab.text = when (position) {
-                    0 -> "Harian"
-                    1 -> "Bulanan"
-                    else -> "Tahunan"
+                    0 -> "Minggu Ini"
+                    1 -> "Bulan Ini"
+                    else -> "Tahun Ini"
                 }
             }.attach()
         }

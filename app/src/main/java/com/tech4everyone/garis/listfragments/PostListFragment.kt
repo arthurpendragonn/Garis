@@ -23,6 +23,9 @@ import com.google.firebase.database.Query
 import com.google.firebase.database.Transaction
 import com.google.firebase.database.database
 import com.google.firebase.Firebase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+import com.google.firebase.database.snapshots
 import com.tech4everyone.garis.DetailTransactionFragment
 import com.tech4everyone.garis.R
 import com.tech4everyone.garis.bitmapToFile
@@ -36,6 +39,8 @@ abstract class PostListFragment : Fragment() {
     private var _binding: FragmentAllPostsBinding? = null
     private val binding get() = _binding!!
 
+    private var transactionSize: Int = 0
+    private var totalNominal: Int = 0
     // [START define_database_reference]
     private lateinit var database: DatabaseReference
     // [END define_database_reference]
@@ -55,7 +60,6 @@ abstract class PostListFragment : Fragment() {
 //        super.onCreateView(inflater, container, savedInstanceState)
 //        val rootView = inflater.inflate(R.layout.fragment_all_posts, container, false)
         _binding = FragmentAllPostsBinding.inflate(inflater, container, false)
-        binding.progressbarMain.visibility = View.VISIBLE
 
         // [START create_database_reference]
         database = Firebase.database.reference
@@ -71,7 +75,6 @@ abstract class PostListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
         // Set up Layout Manager, reverse layout
         manager = LinearLayoutManager(activity)
         manager.reverseLayout = true
@@ -84,6 +87,13 @@ abstract class PostListFragment : Fragment() {
         val options = FirebaseRecyclerOptions.Builder<Post>()
             .setQuery(postsQuery, Post::class.java)
             .build()
+
+        transactionSize = options.snapshots.size
+        if (transactionSize > 0) {
+            options.snapshots.forEach {
+                totalNominal += it.number!!
+            }
+        }
 
         adapter = object : FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
 
@@ -120,8 +130,12 @@ abstract class PostListFragment : Fragment() {
             }
         }
         recycler.adapter = adapter
-        binding.progressbarMain.visibility = View.GONE
 
+
+
+        // setup topbar
+//        binding.jumlahTransaksi.text = transactionSize.toString()
+//        binding.nominalTotal.text = totalNominal.toString()
     }
 
     // [START post_stars_transaction]

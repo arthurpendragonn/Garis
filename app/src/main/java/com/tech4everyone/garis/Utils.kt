@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.icu.text.NumberFormat
 import android.net.Uri
 import android.os.Environment
 import java.io.*
@@ -24,6 +25,11 @@ fun createCustomTemplateFile(context: Context): File {
     return File.createTempFile(timeStamp, ".jpg", storage)
 }
 
+fun rupiah(number: Int): String{
+    val localeID =  Locale("in", "ID")
+    val numberFormat = NumberFormat.getCurrencyInstance(localeID)
+    return numberFormat.format(number).toString()
+}
 fun createFile(application: Application): File {
     val mediaDir = application.externalMediaDirs.firstOrNull()?.let {
         File(it, application.resources.getString(R.string.app_name)).apply { mkdirs() }

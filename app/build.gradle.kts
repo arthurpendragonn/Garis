@@ -60,6 +60,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
     implementation ("com.google.firebase:firebase-auth-ktx:22.2.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6")
+    implementation("com.google.android.material:material:1.6.1")
 
 
     implementation ("com.google.mlkit:text-recognition:16.0.0")
