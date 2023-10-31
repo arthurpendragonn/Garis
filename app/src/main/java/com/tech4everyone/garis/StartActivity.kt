@@ -31,6 +31,7 @@ class StartActivity : AppCompatActivity() {
                 Toast.makeText(this@StartActivity, "Logged in", Toast.LENGTH_LONG).show()
                 val intent = Intent(this@StartActivity, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             } else Toast.makeText(this@StartActivity, "No Auth Data", Toast.LENGTH_LONG).show()
         }
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.auth
@@ -39,10 +40,10 @@ class MainFragment : Fragment(), MenuProvider {
 
         // MenuProvider
         val menuHost: MenuHost = requireActivity() as MenuHost
-        menuHost.addMenuProvider(this)
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         // Create the adapter that will return a fragment for each section
-        pagerAdapter = object : FragmentStateAdapter(parentFragmentManager, viewLifecycleOwner.lifecycle) {
+        pagerAdapter = object : FragmentStateAdapter(childFragmentManager, viewLifecycleOwner.lifecycle) {
             private val fragments = arrayOf<Fragment>(
                 MyDailyFragment(),
                 MyMonthlyFragment(),
