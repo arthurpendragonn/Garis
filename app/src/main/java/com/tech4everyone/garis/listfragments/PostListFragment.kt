@@ -23,6 +23,7 @@ import com.google.firebase.database.Query
 import com.google.firebase.database.Transaction
 import com.google.firebase.database.database
 import com.google.firebase.Firebase
+import com.tech4everyone.garis.DetailTransactionFragment
 import com.tech4everyone.garis.R
 import com.tech4everyone.garis.bitmapToFile
 import com.tech4everyone.garis.databinding.ActivityMainBinding
@@ -96,12 +97,12 @@ abstract class PostListFragment : Fragment() {
 
                 // Set click listener for the whole post view
                 val postKey = postRef.key
-//                viewHolder.itemView.setOnClickListener {
-//                    // Launch PostDetailFragment
-//                    val navController = requireActivity().findNavController(R.id.nav_host_fragment)
-//                    val args = bundleOf(PostDetailFragment.EXTRA_POST_KEY to postKey)
-//                    navController.navigate(R.id.action_MainFragment_to_PostDetailFragment, args)
-//                }
+                viewHolder.itemView.setOnClickListener {
+                    // Launch PostDetailFragment
+                    val navController = requireActivity().findNavController(R.id.nav_host_fragment)
+                    val args = bundleOf(DetailTransactionFragment.EXTRA_POST_KEY to postKey)
+                    navController.navigate(R.id.action_MainFragment_to_PostDetailFragment, args)
+                }
 //
 //                // Determine if the current user has liked this post and set UI accordingly
 //                viewHolder.setLikedState(model.stars.containsKey(uid))

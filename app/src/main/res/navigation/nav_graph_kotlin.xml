@@ -15,6 +15,11 @@
         <action
             android:id="@+id/action_MainFragment_to_NewPostFragment"
             app:destination="@id/NewPostFragment" />
+        <action
+            android:id="@+id/action_MainFragment_to_PostDetailFragment"
+            app:destination="@id/PostDetailFragment" >
+            <argument android:name="post_key" app:nullable="false" app:argType="string" android:defaultValue=""/>
+        </action>
 
     </fragment>
 
@@ -30,5 +35,18 @@
             app:destination="@id/MainFragment"
             app:popUpTo="@id/MainFragment">
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/PostDetailFragment"
+        android:name="com.tech4everyone.garis.DetailTransactionFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_detail_transaction">
+
+        <action
+            android:id="@+id/action_DetailTransactionFragment_to_MainFragment"
+            app:destination="@id/MainFragment"
+            app:popUpTo="@id/MainFragment">
+        </action>
+
     </fragment>
 </navigation>
