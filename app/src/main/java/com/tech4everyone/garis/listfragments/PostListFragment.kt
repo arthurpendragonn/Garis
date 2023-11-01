@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -14,32 +13,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.MutableData
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
-import com.google.firebase.database.Transaction
-import com.google.firebase.database.database
-import com.google.firebase.Firebase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 import com.google.firebase.database.getValue
-import com.google.firebase.database.snapshots
 import com.tech4everyone.garis.DetailTransactionFragment
 import com.tech4everyone.garis.R
-import com.tech4everyone.garis.bitmapToFile
-import com.tech4everyone.garis.databinding.ActivityMainBinding
+import com.tech4everyone.garis.databinding.FragmentAllPostsAltBinding
 import com.tech4everyone.garis.databinding.FragmentAllPostsBinding
-import com.tech4everyone.garis.databinding.FragmentMainBinding
+import com.tech4everyone.garis.rupiah
 import com.tech4everyone.garis.transactions.Post
 import com.tech4everyone.garis.transactions.PostViewHolder
+
 
 abstract class PostListFragment : Fragment() {
     private var _binding: FragmentAllPostsBinding? = null
     private val binding get() = _binding!!
 
-    private var transactionSize: Int = 0
+    private val listTransactions: MutableList<Post?> = ArrayList()
     private var totalNominal: Int = 0
     // [START define_database_reference]
     private lateinit var database: DatabaseReference
@@ -57,8 +54,6 @@ abstract class PostListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-//        super.onCreateView(inflater, container, savedInstanceState)
-//        val rootView = inflater.inflate(R.layout.fragment_all_posts, container, false)
         _binding = FragmentAllPostsBinding.inflate(inflater, container, false)
 
         // [START create_database_reference]
@@ -88,12 +83,8 @@ abstract class PostListFragment : Fragment() {
             .setQuery(postsQuery, Post::class.java)
             .build()
 
-        transactionSize = options.snapshots.size
-        if (transactionSize > 0) {
-            options.snapshots.forEach {
-                totalNominal += it.number!!
-            }
-        }
+        listTransactions.clear()
+        listeningTopBar()
 
         adapter = object : FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
 
@@ -113,11 +104,7 @@ abstract class PostListFragment : Fragment() {
                     val args = bundleOf(DetailTransactionFragment.EXTRA_POST_KEY to postKey)
                     navController.navigate(R.id.action_MainFragment_to_PostDetailFragment, args)
                 }
-//
-//                // Determine if the current user has liked this post and set UI accordingly
-//                viewHolder.setLikedState(model.stars.containsKey(uid))
 
-                // Bind Post to ViewHolder, setting OnClickListener for the star button
                 viewHolder.bindToPost(model) {
                     // Need to write to both places the post is stored
                     val globalPostRef = database.child("posts").child(postRef.key!!)
@@ -130,48 +117,45 @@ abstract class PostListFragment : Fragment() {
             }
         }
         recycler.adapter = adapter
-
-
-
-        // setup topbar
-//        binding.jumlahTransaksi.text = transactionSize.toString()
-//        binding.nominalTotal.text = totalNominal.toString()
     }
 
-    // [START post_stars_transaction]
-//    private fun onStarClicked(postRef: DatabaseReference) {
-//        postRef.runTransaction(object : Transaction.Handler {
-//            override fun doTransaction(mutableData: MutableData): Transaction.Result {
-//                val p = mutableData.getValue(Post::class.java)
-//                    ?: return Transaction.success(mutableData)
-//
-//                if (p.stars.containsKey(uid)) {
-//                    // Unstar the post and remove self from stars
-//                    p.starCount = p.starCount - 1
-//                    p.stars.remove(uid)
-//                } else {
-//                    // Star the post and add self to stars
-//                    p.starCount = p.starCount + 1
-//                    p.stars[uid] = true
-//                }
-//
-//                Toast.makeText(requireContext(), "Delete", Toast.LENGTH_SHORT).show()
-//                // Set value and report transaction success
-//                mutableData.value = p
-//                return Transaction.success(mutableData)
-//            }
-//
-//            override fun onComplete(
-//                databaseError: DatabaseError?,
-//                committed: Boolean,
-//                currentData: DataSnapshot?,
-//            ) {
-//                // Transaction completed
-//                Log.d(TAG, "postTransaction:onComplete:" + databaseError!!)
-//            }
-//        })
-//    }
-    // [END post_stars_transaction]
+    private fun listeningTopBar() {
+        val eventListener: ValueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+//                    val data = dataSnapshot.getValue<Post>()
+
+                    val data = ds.getValue<Post>()
+                    data?.let { x ->
+                        listTransactions.add(x)
+                    }
+                }
+
+                // setup topbar
+                if (listTransactions.size > 0) {
+                    listTransactions.forEachIndexed { index, post ->
+                        totalNominal += post?.number!!
+                    }
+                }
+
+                binding.jumlahTransaksi.text = listTransactions.size.toString()
+                binding.nominalTotal.text = rupiah(totalNominal)
+
+                Log.d(listTransactions.size.toString(), TAG)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+                Toast.makeText(
+                    context,
+                    "Failed to load post.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
+
+        getQuery(database).addListenerForSingleValueEvent(eventListener)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -187,7 +171,6 @@ abstract class PostListFragment : Fragment() {
     abstract fun getQuery(databaseReference: DatabaseReference): Query
 
     companion object {
-
         private const val TAG = "PostListFragment"
     }
 }

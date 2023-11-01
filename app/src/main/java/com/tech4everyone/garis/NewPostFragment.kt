@@ -191,6 +191,11 @@ class NewPostFragment : BaseFragment() {
             return
         }
 
+        if (body.toLong() > 2147483647) {
+            binding.fieldBody.error = "Nominal Kebesaran"
+            return
+        }
+
         if (TextUtils.isEmpty(provider)) {
             binding.provider.error = REQUIRED
             return
