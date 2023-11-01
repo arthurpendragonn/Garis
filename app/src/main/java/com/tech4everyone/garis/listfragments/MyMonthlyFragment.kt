@@ -25,6 +25,19 @@ class MyMonthlyFragment : PostListFragment() {
         val startMonth = LocalDate.of(year, month, 1).format(formatter)
         val endMonth = LocalDate.of(year, month + 1, 1).format(formatter)
 
+//        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+//        val timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+//
+//        val startMonth = Calendar.getInstance(timeZone).apply {
+//            set(Calendar.YEAR, Calendar.MONTH, 1)
+//        }.time
+//
+//        val endOfMonth = Calendar.getInstance(timeZone).apply {
+//            set(Calendar.YEAR, Calendar.MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
+//        }.time
+//
+//        val startMonthAsString = dateFormat.format(startMonth)
+//        val endMonthAsString = dateFormat.format(endOfMonth)
 
         return databaseReference.child("user-posts").child(myUserId)
             .orderByChild("date").startAt(startMonth).endAt(endMonth)

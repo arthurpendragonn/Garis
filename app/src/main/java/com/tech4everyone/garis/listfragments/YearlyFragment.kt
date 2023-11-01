@@ -4,9 +4,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.TimeZone
 
 class YearlyFragment : PostListFragment() {
 
@@ -18,9 +21,8 @@ class YearlyFragment : PostListFragment() {
 
         val month = LocalDate.now().month
         val year = LocalDate.now().year
-        val startYear = LocalDate.of(year, month, 1).format(formatter)
+        val startYear = LocalDate.of(year, 1, 1).format(formatter)
         val endYear = LocalDate.of(year+1, month, 1).format(formatter)
-
 
         return databaseReference.child("user-posts").child(myUserId)
             .orderByChild("date").startAt(startYear).endAt(endYear)
