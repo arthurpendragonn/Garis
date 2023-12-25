@@ -22,8 +22,13 @@ class MyMonthlyFragment : PostListFragment() {
 
         val month = LocalDate.now().month
         val year = LocalDate.now().year
+        val dec = LocalDate.of(year, 12, 1)
         val startMonth = LocalDate.of(year, month, 1).format(formatter)
-        val endMonth = LocalDate.of(year, month + 1, 1).format(formatter)
+        val endMonth = if (month == dec.month) {
+            LocalDate.of(year, month, 31).format(formatter)
+        } else {
+            LocalDate.of(year, month + 1, 1).format(formatter)
+        }
 
 //        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 //        val timeZone = TimeZone.getTimeZone("Asia/Jakarta")

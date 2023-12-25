@@ -24,13 +24,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="@font/inter_bold"-->
-<!--                android:text="Tambahkan Transaksi Baru"-->
-<!--                android:textColor="#494949"-->
-<!--                android:textSize="24sp" />-->
+            <LinearLayout
+                android:id="@+id/add_image_layout"
+                android:gravity="center"
+                android:background="@drawable/btn_white_stroke_alt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:orientation="horizontal">
+
+<!--                <com.airbnb.lottie.LottieAnimationView-->
+<!--                    android:id="@+id/animation"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    app:lottie_rawRes="@raw/send_image_animation"-->
+<!--                    app:lottie_autoPlay="true"-->
+<!--                    app:lottie_loop="true"/>-->
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/baseline_file_upload_24"/>
+
+                <TextView
+                    android:id="@+id/tv_add_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:text="Buka Gallery"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/photo"
@@ -38,32 +63,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"
                 android:background="@drawable/btn_white_stroke_alt"
-                android:minHeight="90dp"
-                android:padding="24dp"
-                android:src="@drawable/upload_img"
+                android:minHeight="100dp"
+                android:padding="12dp"
+                android:src="@drawable/baseline_add_photo_alternate_24"
                 app:layout_constraintBottom_toTopOf="@+id/txt_photo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
 
-            <TextView
-                android:id="@+id/tv1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="Pilih bukti transaksi dari Gallery anda"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tv1"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/inter"-->
+<!--                android:text="Pilih bukti transaksi dari Gallery anda"-->
+<!--                android:textColor="#000000"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:id="@+id/tv2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="Sistem akan membantu menuliskan datanya"
-                android:textColor="#FF0000"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tv2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/inter"-->
+<!--                android:text="Sistem akan membantu menuliskan datanya"-->
+<!--                android:textColor="#FF0000"-->
+<!--                android:textSize="16sp" />-->
+
 
             <ProgressBar
                 android:id="@+id/prograss"
@@ -76,11 +103,30 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:padding="12dp"
+                android:background="@drawable/btn_white_stroke_alt"
                 android:layout_marginVertical="6dp"
                 android:orientation="vertical">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_scan"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:lottie_rawRes="@raw/send_image_animation"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"/>
+
                 <TextView
-                    android:id="@+id/succes"
+                    android:id="@+id/tv_rekognisi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter"
+                    android:text="Masukkan gambar untuk melakukan rekognisi"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/successNominal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
@@ -88,12 +134,12 @@
                     android:drawablePadding="12dp"
                     android:text="Nominal Terbaca"
                     android:textColor="#009688"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:visibility="gone"
-                    app:drawableStartCompat="@drawable/icons8_success_48" />
+                    app:drawableStartCompat="@drawable/baseline_check_circle_outline_24" />
 
                 <TextView
-                    android:id="@+id/fail"
+                    android:id="@+id/failNominal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
@@ -101,9 +147,62 @@
                     android:drawablePadding="12dp"
                     android:text="Nominal Tidak Terbaca"
                     android:textColor="#E91E63"
-                    android:textSize="20sp"
-                    app:drawableStartCompat="@drawable/icons8_cancel_48"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/baseline_do_not_disturb_alt_24"
                     android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/succesProvider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:drawablePadding="12dp"
+                    android:text="Provider Terbaca"
+                    android:textColor="#009688"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/baseline_check_circle_outline_24" />
+
+                <TextView
+                    android:id="@+id/failProvider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:drawablePadding="12dp"
+                    android:text="Provider Tidak Terbaca"
+                    android:textColor="#E91E63"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/baseline_do_not_disturb_alt_24"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/successDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:drawablePadding="12dp"
+                    android:text="Tanggal Terbaca"
+                    android:textColor="#009688"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/baseline_check_circle_outline_24" />
+
+                <TextView
+                    android:id="@+id/failDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:drawablePadding="12dp"
+                    android:text="Tanggal Tidak Terbaca"
+                    android:textColor="#E91E63"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/baseline_do_not_disturb_alt_24"
+                    android:visibility="gone" />
+
 
             </LinearLayout>
 
@@ -114,7 +213,7 @@
                 android:fontFamily="@font/inter"
                 android:layout_marginTop="12dp"
                 android:text="Silahkan lengkapi data berikut: "
-                android:textColor="#959595"
+                android:textColor="#404040"
                 android:textSize="16sp" />
 
             <EditText
@@ -123,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_white_alt"
-                android:drawableStart="@drawable/icons8_label_24"
+                android:drawableStart="@drawable/baseline_label_24"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/inter"
                 android:hint="Judul"
@@ -138,7 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/btn_white_alt"
-                android:drawableStart="@drawable/icons8_paid_bill_24"
+                android:drawableStart="@drawable/baseline_calculate_24"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/inter"
                 android:hint="Jumlah Nominal"
@@ -152,9 +251,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="100dp"
                 android:background="@drawable/btn_white_alt"
-                android:drawableStart="@drawable/icons8_apps_24"
+                android:drawableStart="@drawable/baseline_apps_24"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/inter"
                 android:hint="Penyedia Layanan"
@@ -162,6 +260,22 @@
                 android:maxLines="1"
                 android:minHeight="48dp"
                 android:padding="12.5dp" />
+
+            <TextView
+                android:id="@+id/tv_datePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="100dp"
+                android:background="@drawable/btn_white_alt"
+                android:fontFamily="@font/inter"
+                android:drawableStart="@drawable/baseline_date_range_24"
+                android:drawablePadding="12dp"
+                android:textSize="18sp"
+                android:text="12/12/2024"
+                android:padding="12.5dp" />
+
+
         </LinearLayout>
 
     </ScrollView>
@@ -173,7 +287,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/icons8_create_document_48"
+        android:src="@drawable/baseline_check_24"
         android:backgroundTint="#FFFFFF"
         app:borderWidth="0dp"
         app:tint="@null"
@@ -188,7 +302,7 @@
         android:background="@null"
         app:tint="@null"
         android:layout_margin="16dp"
-        android:src="@drawable/icons8_back_96"
+        android:src="@drawable/baseline_arrow_circle_left_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

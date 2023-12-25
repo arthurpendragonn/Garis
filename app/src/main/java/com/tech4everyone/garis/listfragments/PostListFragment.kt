@@ -83,7 +83,6 @@ abstract class PostListFragment : Fragment() {
             .setQuery(postsQuery, Post::class.java)
             .build()
 
-        listTransactions.clear()
         listeningTopBar()
 
         adapter = object : FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
@@ -120,11 +119,16 @@ abstract class PostListFragment : Fragment() {
     }
 
     private fun listeningTopBar() {
+        binding.jumlahTransaksi.text = "0"
+        binding.nominalTotal.text = "0"
+        listTransactions.clear()
+        totalNominal = 0
+
         val eventListener: ValueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                binding.topBarMain.visibility = View.VISIBLE
+                binding.progressBarTop.visibility = View.GONE
                 for (ds in dataSnapshot.children) {
-//                    val data = dataSnapshot.getValue<Post>()
-
                     val data = ds.getValue<Post>()
                     data?.let { x ->
                         listTransactions.add(x)
@@ -138,7 +142,7 @@ abstract class PostListFragment : Fragment() {
                     }
                 }
 
-                binding.jumlahTransaksi.text = listTransactions.size.toString()
+                binding.jumlahTransaksi.text = "${listTransactions.size} transaksi"
                 binding.nominalTotal.text = rupiah(totalNominal)
 
                 Log.d(listTransactions.size.toString(), TAG)
@@ -162,11 +166,15 @@ abstract class PostListFragment : Fragment() {
         adapter?.startListening()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter?.startListening()
+    }
+
     override fun onStop() {
         super.onStop()
         adapter?.stopListening()
     }
-
 
     abstract fun getQuery(databaseReference: DatabaseReference): Query
 

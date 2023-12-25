@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ class MainFragment : Fragment(), MenuProvider {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        activity?.actionBar?.title = "Garis"
+        (activity as AppCompatActivity).supportActionBar?.title = "Rekap Pengeluaran"
 
         return binding.root
     }
@@ -78,7 +79,12 @@ class MainFragment : Fragment(), MenuProvider {
             val intent = Intent(requireContext(), StartActivity::class.java)
             startActivity(intent)
             true
-        } else {
+        } else if(menuItem.itemId == R.id.action_custom_range) {
+            val intent = Intent(requireContext(), CustomRangeActivity::class.java)
+            startActivity(intent)
+            true
+        }
+        else {
             false
         }
     }

@@ -5,10 +5,13 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.icu.text.NumberFormat
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -115,3 +118,17 @@ fun bitmapToFile(context: Context, bitmap: Bitmap): File {
 
     return file
 }
+
+
+//private fun uriToBitmap(selectedFileUri: Uri): Bitmap? {
+//    try {
+//        val parcelFileDescriptor = contentResolver.openFileDescriptor(selectedFileUri, "r")
+//        val fileDescriptor: FileDescriptor = parcelFileDescriptor!!.fileDescriptor
+//        val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+//        parcelFileDescriptor.close()
+//        return image
+//    } catch (e: IOException) {
+//        e.printStackTrace()
+//    }
+//    return null
+//}
