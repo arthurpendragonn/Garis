@@ -22,6 +22,7 @@ class PostAdapter() : RecyclerView.Adapter<PostAdapter.ListViewHolder>() {
         listUser.clear()
         listUser.addAll(data)
         diffResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {

@@ -5,14 +5,19 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 import com.tech4everyone.garis.databinding.ActivityCustomRangeBinding
 import com.tech4everyone.garis.transactions.MainViewModel
 import com.tech4everyone.garis.transactions.Post
@@ -25,7 +30,7 @@ import java.util.Locale
 
 class CustomRangeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomRangeBinding
-    private val listTransactions: MutableList<Post?> = ArrayList()
+    private val listTransactions: MutableList<Post> = ArrayList()
     private var totalNominal: Int = 0
     private val viewModel: MainViewModel by viewModels()
 
@@ -41,6 +46,7 @@ class CustomRangeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomRangeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         database = Firebase.database.reference
 
@@ -58,7 +64,7 @@ class CustomRangeActivity : AppCompatActivity() {
             LocalDate.of(year, month + 1, 1).format(formatter)
         }
 
-        binding.tvEndDatePicker.text = startMonth
+        binding.tvStartDatePicker.text = startMonth
         binding.tvEndDatePicker.text = endMonth
 
         binding.tvStartDatePicker.setOnClickListener {
@@ -67,10 +73,35 @@ class CustomRangeActivity : AppCompatActivity() {
         binding.tvEndDatePicker.setOnClickListener {
             showDatePicker(false)
         }
-//        val postQuery = database.child("user-posts").child(uid)
-//            .orderByChild("date").startAt(startMonth).endAt(endMonth)
-//
-//        adapter.setData(viewModel.fetchData(postQuery))
+
+        showRecyclerView()
+
+        val postQuery = database.child("user-posts").child(uid)
+            .orderByChild("date").startAt(startMonth).endAt(endMonth)
+        val eventListener: ValueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                listTransactions.clear()
+                for (ds in dataSnapshot.children) {
+                    val data = ds.getValue<Post>()
+                    data?.let { x ->
+                        listTransactions.add(x)
+                    }
+                }
+
+                adapter.setData(listTransactions);
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("Getting Data Firebase", "loadPost:onCancelled", databaseError.toException())
+
+            }
+        }
+
+        postQuery.addListenerForSingleValueEvent(eventListener)
+
+
+        //adapter.setData(viewModel.fetchData(postQuery))
 
 
 
@@ -81,7 +112,29 @@ class CustomRangeActivity : AppCompatActivity() {
             val postQuery = database.child("user-posts").child(uid)
                 .orderByChild("date").startAt(startDate).endAt(endDate)
 
-//            adapter.setData(viewModel.fetchData(postQuery))
+            //adapter.setData(viewModel.fetchData(postQuery))
+
+            val eventListener: ValueEventListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                    listTransactions.clear()
+                    for (ds in dataSnapshot.children) {
+                        val data = ds.getValue<Post>()
+                        data?.let { x ->
+                            listTransactions.add(x)
+                        }
+                    }
+
+                    adapter.setData(listTransactions);
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w("Getting Data Firebase", "loadPost:onCancelled", databaseError.toException())
+
+                }
+            }
+
+            postQuery.addListenerForSingleValueEvent(eventListener)
         }
     }
 

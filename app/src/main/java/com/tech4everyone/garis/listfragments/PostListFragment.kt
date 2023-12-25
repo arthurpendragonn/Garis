@@ -18,14 +18,13 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import com.tech4everyone.garis.DetailTransactionFragment
 import com.tech4everyone.garis.R
-import com.tech4everyone.garis.databinding.FragmentAllPostsAltBinding
+import com.tech4everyone.garis.WrapperLinearLayoutManager
 import com.tech4everyone.garis.databinding.FragmentAllPostsBinding
 import com.tech4everyone.garis.rupiah
 import com.tech4everyone.garis.transactions.Post
@@ -43,7 +42,8 @@ abstract class PostListFragment : Fragment() {
     // [END define_database_reference]
 
     private lateinit var recycler: RecyclerView
-    private lateinit var manager: LinearLayoutManager
+    //private lateinit var manager: LinearLayoutManager
+    private lateinit var manager: WrapperLinearLayoutManager
     private var adapter: FirebaseRecyclerAdapter<Post, PostViewHolder>? = null
 
     val uid: String
@@ -71,7 +71,8 @@ abstract class PostListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // Set up Layout Manager, reverse layout
-        manager = LinearLayoutManager(activity)
+        //manager = LinearLayoutManager(activity)
+        manager = WrapperLinearLayoutManager(activity)
         manager.reverseLayout = true
         manager.stackFromEnd = true
         recycler.layoutManager = manager
@@ -163,12 +164,13 @@ abstract class PostListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        //recycler.recycledViewPool.clear()
         adapter?.startListening()
     }
 
     override fun onResume() {
         super.onResume()
-        adapter?.startListening()
+        //adapter?.startListening()
     }
 
     override fun onStop() {
