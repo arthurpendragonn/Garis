@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import com.tech4everyone.garis.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

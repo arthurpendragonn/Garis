@@ -3,11 +3,12 @@ package com.tech4everyone.garis
 import android.app.DatePickerDialog
 import android.content.res.Configuration
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Firebase
@@ -47,6 +48,8 @@ class CustomRangeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomRangeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         database = Firebase.database.reference
 
@@ -179,6 +182,16 @@ class CustomRangeActivity : AppCompatActivity() {
         )
         // Show the DatePicker dialog
         datePickerDialog.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
